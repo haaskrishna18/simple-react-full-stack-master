@@ -1,0 +1,36 @@
+name: Fullstack App CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-run:
+    runs-on: self-hosted  # 👈 use your self-hosted runner
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and start containers
+        run: |
+          docker-compose -f docker-compose.yml up --build -d
+
+      - name: Wait for app to become ready (optional)
+        run: |
+          echo "Waiting for services to boot..."
+          sleep 15  # You can improve this by using curl or healthchecks
+
+      - name: Run backend tests (example)
+        run: |
+          docker exec $(docker ps -qf "name=server") npm test
+
+      - name: Stop containers
+        if: always()
+        run: |
+          docker-compose down
