@@ -3,15 +3,15 @@ name: Fullstack App CI + GHCR Push
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
+  workflow_dispatch:  # allows manual runs
 
 jobs:
   build-and-push:
     runs-on: self-hosted
 
     permissions:
-      packages: write  # required for GHCR push
-      contents: read
+      packages: write  # Required for pushing to GHCR
+      contents: read   # Required for checking out code
 
     steps:
       - name: Checkout code
