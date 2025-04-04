@@ -3,6 +3,7 @@ name: Fullstack App CI + GHCR Push
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build-and-push:
